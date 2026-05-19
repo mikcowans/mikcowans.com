@@ -1,0 +1,299 @@
+@import "tailwindcss";
+
+/* Inter — self-hosted, latin + latin-ext subsets, weights 300–600 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* =============================================================
+   Warm Slate — Design Tokens
+   ============================================================= */
+:root {
+  /* Backgrounds */
+  --color-bg-base:     #181613;
+  --color-bg-surface:  #22201a;
+  --color-bg-elevated: #2a2820;
+  --color-border:      #333026;
+
+  /* Text */
+  --color-text-primary:   #f0e8d8;
+  --color-text-secondary: #aa9878;
+  --color-text-muted:     #b8a090;
+
+  /* Accent — amber */
+  --color-accent:       #e8963a;
+  --color-accent-light: #f5b96a;
+  --color-accent-tint:  #2e2516;
+
+  /* Amber scale */
+  --color-amber-100: #2e2516;
+  --color-amber-200: #4a3a1a;
+  --color-amber-300: #7a5a22;
+  --color-amber-400: #b87830;
+  --color-amber-500: #e8963a;
+  --color-amber-600: #f5b96a;
+  --color-amber-700: #fdd9a8;
+
+  /* Typography */
+  --font-sans: 'Inter', 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+
+  /* Radii */
+  --radius-sm:     6px;
+  --radius-md:     8px;
+  --radius-lg:     12px;
+  --radius-pill:   999px;
+  --radius-search: 24px;
+}
+
+/* =============================================================
+   Base reset + typography
+   ============================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 100dvh;
+  overflow-y: scroll;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(232, 150, 58, 0.25) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: linear-gradient(to right, black 0%, transparent 30%, transparent 70%, black 100%);
+  mask-image: linear-gradient(to right, black 0%, transparent 30%, transparent 70%, black 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* =============================================================
+   Typing animation — clip-path reveal (works inside flex, SEO safe)
+   ============================================================= */
+@media (prefers-reduced-motion: no-preference) {
+  .typing-text {
+    animation: typing-reveal 1.4s steps(18, end) both;
+    animation-delay: 0.1s;
+  }
+
+  @keyframes typing-reveal {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0% 0 0); }
+  }
+
+  /* Individual sections fade in one by one after search settles */
+  .section-reveal {
+    opacity: 0;
+    animation: section-fade 0.5s ease forwards;
+  }
+
+  @keyframes section-fade {
+    to { opacity: 1; }
+  }
+
+  /* Slide-only entrance: opacity stays 1 so LCP is measured immediately */
+  .section-slide {
+    transform: translateY(8px);
+    animation: section-slide-up 0.3s ease both;
+  }
+
+  @keyframes section-slide-up {
+    to { transform: translateY(0); }
+  }
+}
+
+/* =============================================================
+   Stagger entrance for results
+   ============================================================= */
+@media (prefers-reduced-motion: no-preference) {
+  .stagger-in {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fade-up 0.45s ease forwards;
+  }
+
+  @keyframes fade-up {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .delay-1  { animation-delay: 0.5s; }
+  .delay-2  { animation-delay: 0.65s; }
+  .delay-3  { animation-delay: 1.7s; }
+  .delay-4  { animation-delay: 1.85s; }
+  .delay-5  { animation-delay: 2.0s; }
+  .delay-6  { animation-delay: 2.15s; }
+  .delay-7  { animation-delay: 2.3s; }
+  .delay-8  { animation-delay: 2.2s; }
+  .delay-9  { animation-delay: 2.35s; }
+  .delay-10 { animation-delay: 2.5s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger-in { opacity: 1; transform: none; }
+}
+
+/* =============================================================
+   Search bar glow on focus
+   ============================================================= */
+.search-bar-wrap {
+  transition: box-shadow 0.25s ease;
+}
+
+.search-bar-wrap:focus-within {
+  box-shadow:
+    0 0 0 1px var(--color-accent),
+    0 4px 32px color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+/* =============================================================
+   Result link — amber underline draw-in on hover
+   ============================================================= */
+.result-link {
+  display: inline-block;
+  position: relative;
+}
+
+.result-link::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent);
+  transition: width 0.25s ease;
+}
+
+.result-link:hover::after,
+.result-link:focus-visible::after {
+  width: 100%;
+}
+
+/* =============================================================
+   Preview card — slides in on result group hover
+   ============================================================= */
+.result-item {
+  position: relative;
+}
+
+.preview-card {
+  position: absolute;
+  right: -288px;
+  top: 0;
+  width: 268px;
+  opacity: 0;
+  transform: translateX(-8px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .result-item:hover .preview-card,
+  .result-item:focus-within .preview-card {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+}
+
+/* =============================================================
+   Image tile — lift and zoom
+   ============================================================= */
+.image-tile {
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .image-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  }
+
+  .image-tile img {
+    transition: transform 0.4s ease;
+  }
+
+  .image-tile:hover img {
+    transform: scale(1.06);
+  }
+
+  .image-tile .tile-caption {
+    transform: translateY(6px);
+    opacity: 0.7;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .image-tile:hover .tile-caption {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =============================================================
+   Scroll reveal
+   ============================================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* =============================================================
+   Scrollbar
+   ============================================================= */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar:horizontal { display: none; }
+::-webkit-scrollbar-track { background: var(--color-bg-base); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }

@@ -1,0 +1,201 @@
+---
+import BaseLayout   from '../layouts/BaseLayout.astro';
+import SearchBar    from '../components/SearchBar.astro';
+import RichResult   from '../components/RichResult.astro';
+import ResultsSection from '../components/ResultsSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+import BrandLogos    from '../components/BrandLogos.astro';
+
+import { projects } from '../data/projects';
+import { roles }    from '../data/roles';
+
+// ── Schema.org markup ──────────────────────────────────────────
+const siteUrl = 'https://mikcowans.com';
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${siteUrl}/#person`,
+  name: 'Mik Cowans',
+  url: siteUrl,
+  image: `${siteUrl}/mik-cowans.jpg`,
+  jobTitle: 'SEO Consultant & Strategist',
+  description: 'Independent SEO consultant with almost 20 years of experience helping global B2C and B2B brands grow organic visibility through technical precision, content strategy, and data-driven insight.',
+  sameAs: ['https://www.linkedin.com/in/mikcowans/'],
+  hasOccupation: {
+    '@type': 'Occupation',
+    name: 'SEO Consultant',
+    occupationLocation: { '@type': 'Country', name: 'United Kingdom' },
+    skills: 'Technical SEO, Content Strategy, Keyword Research, International SEO, Core Web Vitals, GEO, Organic Growth',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressRegion: 'Scotland',
+    addressCountry: 'GB',
+  },
+  email: 'mikcowans@gmail.com',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'business enquiries',
+    email: 'mikcowans@gmail.com',
+    url: 'https://mikcowans.com/#contact',
+    availableLanguage: 'English',
+  },
+  knowsAbout: [
+    'Search Engine Optimisation',
+    'Technical SEO',
+    'Content Strategy',
+    'Core Web Vitals',
+    'International SEO',
+    'Generative Engine Optimisation',
+    'Keyword Research',
+    'SEO Product Management',
+  ],
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteUrl}/#website`,
+  name: 'Mik Cowans',
+  url: siteUrl,
+  description: 'Portfolio of Mik Cowans — SEO Consultant & Strategist.',
+  inLanguage: 'en-GB',
+  author: { '@id': `${siteUrl}/#person` },
+};
+
+const professionalServiceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${siteUrl}/#service`,
+  name: 'Mik Cowans — SEO Consulting',
+  url: siteUrl,
+  description: 'Independent SEO consulting services covering technical audits, content strategy, international SEO, and organic growth programmes.',
+  provider: { '@id': `${siteUrl}/#person` },
+  areaServed: 'Worldwide',
+  availableLanguage: 'English',
+  serviceType: ['Technical SEO', 'Content Strategy', 'SEO Consulting', 'International SEO', 'Keyword Research', 'GEO'],
+  address: {
+    '@type': 'PostalAddress',
+    addressRegion: 'Scotland',
+    addressCountry: 'GB',
+  },
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What SEO services does Mik Cowans offer?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Mik Cowans offers three types of engagement: full-time remote SEO roles, fractional SEO advisory for brands that need senior expertise without a full-time hire, and freelance project work with a clearly defined scope. Services include technical SEO audits, content strategy, keyword research, international SEO, Core Web Vitals optimisation, and AI/GEO strategy.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How many years of SEO experience does Mik Cowans have?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Mik Cowans has almost 20 years of SEO experience, working across global B2C and B2B brands in financial services, eCommerce, SaaS, education, and travel and hospitality.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Where is Mik Cowans based?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Mik Cowans is based in Scotland and works remotely with clients and employers worldwide.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is Mik Cowans available for freelance or contract SEO work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Mik Cowans is open to full-time remote roles, fractional SEO advisory engagements, and freelance project work. Get in touch via LinkedIn or email to discuss availability and scope.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What industries has Mik Cowans worked in?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Mik Cowans has led SEO strategy across financial services (NatWest, Standard Life, Aberdeen Investments), B2B SaaS (DataCamp, Wood Mackenzie), eCommerce (Student Beans, Morph Costumes, UGG), travel and hospitality (Marriott, Choice Hotels, Stena Line), and international education (Nord Anglia Education).',
+      },
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title="Mik Cowans — SEO Consultant & Strategist"
+  description="Independent SEO consultant helping brands grow organic visibility through technical precision, content strategy, and data-driven insight."
+  schema={[personSchema, websiteSchema, professionalServiceSchema, faqSchema]}
+>
+  <div
+    class="min-h-screen flex flex-col"
+    style="max-width: 840px; margin: 0 auto; padding: 0 1.25rem;"
+  >
+    <SearchBar currentPath="/" intro={true} />
+
+    <main id="main-content" class="flex-1 flex flex-col pb-4">
+      <div class="section-slide"><RichResult /></div>
+      <ResultsSection projects={projects.slice(0, 2)} roles={roles} />
+      <div class="section-reveal" style="animation-delay: 2.6s"><ContactSection /></div>
+    </main>
+  </div>
+
+  <BrandLogos />
+
+  <footer style="width:100%; border-top:1px solid var(--color-border); font-size:0.875rem; color:var(--color-text-muted);">
+    <!-- Upper row: context info -->
+    <div style="
+      background: var(--color-bg-surface);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    ">
+      <span style="
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        padding: 3px 8px;
+        margin-right: 10px;
+        color: var(--color-text-secondary);
+      ">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        United Kingdom
+      </span>
+      <span>Location: Scotland</span>
+      <span style="margin:0 6px;">·</span>
+      <span>Working: Remote</span>
+      <span style="margin:0 6px;">·</span>
+      <span>Social:&nbsp;<a
+        href="https://www.linkedin.com/in/mikcowans/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="color:var(--color-text-muted); text-decoration:none;"
+        onmouseover="this.style.color='var(--color-text-primary)'"
+        onmouseout="this.style.color='var(--color-text-muted)'"
+      >LinkedIn</a></span>
+    </div>
+    <!-- Lower row: copyright -->
+    <div style="
+      border-top: 1px solid var(--color-border);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    ">
+      <span>© {new Date().getFullYear()} Mik Cowans</span>
+    </div>
+  </footer>
+
+</BaseLayout>

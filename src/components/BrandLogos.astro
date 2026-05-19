@@ -1,0 +1,158 @@
+---
+const brands = [
+  { name: 'DataCamp',       logo: '/logos/DataCamp.svg' },
+  { name: 'Student Beans',  logo: '/logos/Student_Beans.svg' },
+  { name: 'NatWest',        logo: '/logos/NatWest.svg', maxHeight: '52px' },
+  { name: 'RBS',            logo: '/logos/Royal_Bank_of_Scotland.svg' },
+  { name: 'Aberdeen',       logo: '/logos/Aberdeen_Investments_svg.svg', maxHeight: '160px' },
+  { name: 'Standard Life',  logo: '/logos/Standard_Life.svg' },
+  { name: 'Marriott',       logo: '/logos/Marriott_International.svg' },
+  { name: 'Wood Mackenzie', logo: '/logos/woodmac-logo.svg' },
+  { name: 'HPE',            logo: '/logos/Hewlett_Packard_Enterprise.svg' },
+  { name: 'Bulk',           logo: '/logos/Bulk.svg' },
+  { name: 'Nord Anglia',    logo: '/logos/Nord_Anglia.svg' },
+  { name: 'Under Armour',   logo: '/logos/Under_Armour.svg' },
+  { name: 'Europcar',       logo: '/logos/Europcar.svg' },
+  { name: 'Danone',         logo: '/logos/Danone_dairy_logo.svg' },
+  { name: 'AstraZeneca',    logo: '/logos/AstraZeneca_logo.svg' },
+  { name: 'Choice Hotels',  logo: '/logos/Choice_Hotels.svg' },
+  { name: 'Formula 1',      logo: '/logos/Formula_1.svg' },
+  { name: 'Stena Line',     logo: '/logos/Stena_Line.svg' },
+  { name: 'UGG',            logo: '/logos/UGG.svg' },
+  { name: 'Morph Costumes', logo: '/logos/Morph_Costumes.svg' },
+  { name: 'Prudential',     logo: '/logos/Prudential.svg' },
+];
+
+const initials = (name: string) =>
+  name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+---
+
+<section aria-label="Brands I've helped grow" style="padding: 32px 0 28px;">
+  <div style="max-width: 840px; margin: 0 auto; padding: 0 1.25rem;">
+
+    <h2 style="
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin: 0 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      Brands I've helped grow
+      <span style="flex:1; height:1px; background:var(--color-text-muted); opacity:0.35; margin-left:4px;"></span>
+    </h2>
+
+    <div id="brands-wrap" class="brands-wrap">
+      {brands.map(({ name, logo, maxHeight }) => (
+        <div class="brand-tile">
+          <div class={`brand-box ${logo ? 'brand-box--logo' : 'brand-box--text'}`}>
+            {logo
+              ? <img src={logo} alt={name} loading="lazy" width="200" height="70" style={`max-height:${maxHeight ?? '70px'}; max-width:100%; object-fit:contain; display:block;`} />
+              : <span class="brand-initials">{initials(name)}</span>
+            }
+          </div>
+          <p class="brand-name">{name}</p>
+        </div>
+      ))}
+    </div>
+
+    <div style="display:flex; justify-content:center; margin-top:16px;">
+      <button id="brands-toggle" aria-expanded="false" class="brands-btn">
+        More
+        <svg id="brands-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .brands-wrap {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    overflow: hidden;
+    max-height: 152px;
+    transition: max-height 0.4s ease;
+  }
+  .brands-wrap.expanded { max-height: 800px; }
+
+  .brand-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .brand-box {
+    width: 100%;
+    height: 110px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .brand-box--logo { background: #ffffff; padding: 4px 8px; }
+  .brand-box--text { background: var(--color-bg-surface); }
+
+  .brand-initials {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  .brand-name {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    line-height: 1.3;
+    width: 100%;
+  }
+
+  .brands-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    border-radius: var(--radius-pill);
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .brands-btn:hover {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+  }
+  #brands-chevron { transition: transform 0.3s ease; }
+</style>
+
+<script>
+  const wrap   = document.getElementById('brands-wrap');
+  const btn    = document.getElementById('brands-toggle');
+  const icon   = document.getElementById('brands-chevron');
+  const label  = btn?.firstChild as Text;
+
+  btn?.addEventListener('click', () => {
+    const expanded = wrap?.classList.toggle('expanded') ?? false;
+    btn.setAttribute('aria-expanded', String(expanded));
+    if (label) label.textContent = expanded ? 'Less' : 'More';
+    if (icon)  (icon as HTMLElement).style.transform = expanded ? 'rotate(180deg)' : '';
+  });
+</script>

@@ -1,0 +1,192 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BackBar from '../../components/BackBar.astro';
+import PDFViewer from '../../components/PDFViewer.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+
+const currentIndex = projects.findIndex(p => p.slug === project.slug);
+const otherProjects = projects
+  .filter(p => p.slug !== project.slug)
+  .slice(currentIndex % 2 === 0 ? 0 : 1, (currentIndex % 2 === 0 ? 0 : 1) + 2)
+  .concat(projects.filter(p => p.slug !== project.slug))
+  .filter((p, i, arr) => arr.findIndex(x => x.slug === p.slug) === i)
+  .slice(0, 2);
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home',        item: 'https://mikcowans.com' },
+    { '@type': 'ListItem', position: 2, name: 'Projects',    item: 'https://mikcowans.com/projects' },
+    { '@type': 'ListItem', position: 3, name: project.title, item: `https://mikcowans.com/projects/${project.slug}` },
+  ],
+};
+
+const siteUrl = 'https://mikcowans.com';
+const creativeWork = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  '@id': `${siteUrl}/projects/${project.slug}#work`,
+  name: project.title,
+  url: `${siteUrl}/projects/${project.slug}`,
+  description: project.description,
+  author: { '@id': `${siteUrl}/#person` },
+  keywords: project.tags.join(', '),
+  inLanguage: 'en-GB',
+  isPartOf: { '@id': `${siteUrl}/#website` },
+};
+---
+
+<BaseLayout
+  title={`${project.title} — Mik Cowans`}
+  description={project.preview}
+  ogType="article"
+  schema={[breadcrumb, creativeWork]}
+>
+  <Fragment slot="head">
+    <meta property="article:author" content="https://www.linkedin.com/in/mikcowans/" />
+  </Fragment>
+  <div style="max-width: 840px; margin: 0 auto; padding: 0 1.25rem;">
+    <BackBar />
+    <main id="main-content" class="pb-16 pt-6">
+      <!-- Breadcrumb nav -->
+      <nav aria-label="Breadcrumb" class="mb-5">
+        <ol class="flex items-center gap-1.5 text-sm m-0 p-0 list-none" style="color: var(--color-text-muted);">
+          <li><a href="/" class="result-link" style="color: var(--color-info);">Home</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href="/projects" class="result-link" style="color: var(--color-info);">Projects</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" style="color: var(--color-text-secondary);">{project.title}</li>
+        </ol>
+      </nav>
+
+      <!-- Title -->
+      <h1 class="text-4xl font-semibold m-0 mb-3" style="color: var(--color-text-primary); line-height: 1.15;">
+        {project.title}
+      </h1>
+
+      <!-- Tags -->
+      <div class="flex flex-wrap gap-1.5 mb-5">
+        {project.tags.map((tag) => (
+          <span class="text-sm px-2 py-0.5 rounded-full"
+            style="background: var(--color-accent-tint); color: var(--color-accent-light);">
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      {project.pdfEmbed && (
+        <PDFViewer src={project.pdfEmbed} title={`${project.title} — strategy document`} />
+      )}
+
+      <!-- Body content -->
+      <!-- Body paragraphs (if provided) or fallback description card -->
+      {project.body ? (
+        <div class="flex flex-col gap-4 mb-8">
+          {project.body.map((para, i) => (
+            i === 0 ? (
+              <div class="rounded-xl p-6" style="background: var(--color-bg-surface); border: 1px solid var(--color-border);">
+                <p class="text-base leading-relaxed m-0" style="color: var(--color-text-secondary);">{para}</p>
+              </div>
+            ) : (
+              <p class="text-base leading-relaxed m-0" style="color: var(--color-text-secondary);">{para}</p>
+            )
+          ))}
+        </div>
+      ) : (
+        <div
+          class="rounded-xl p-6 mb-6"
+          style="background: var(--color-bg-surface); border: 1px solid var(--color-border);"
+        >
+          <p class="text-base leading-relaxed m-0" style="color: var(--color-text-secondary);">
+            {project.description}
+          </p>
+        </div>
+      )}
+
+      <section id="scope" class="mb-8 scroll-mt-8">
+        <h2 class="text-lg font-semibold mb-3" style="color: var(--color-text-primary);">{project.scopeHeading ?? 'This project covers'}</h2>
+        <ul class="m-0 p-0 list-none flex flex-col gap-2">
+          {project.scope.map((item) => (
+            <li class="flex items-start gap-2 text-base" style="color: var(--color-text-secondary);">
+              <span style="color: var(--color-accent); margin-top: 2px; flex-shrink: 0;">›</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {project.docLink && project.docLink !== '#' && (
+        <div class="mb-8">
+          <a
+            href={project.docLink}
+            class="inline-block text-sm font-medium rounded-lg px-4 py-2"
+            style="background: var(--color-accent-tint); color: var(--color-accent-light); border: 1px solid var(--color-accent-light); text-decoration: none;"
+          >
+            {project.docLinkLabel ?? 'View the full strategy document.'}
+          </a>
+        </div>
+      )}
+
+      <!-- Other projects -->
+      <section class="mt-24 mb-10" aria-label="Other projects">
+        <h2
+          class="text-sm font-semibold uppercase tracking-widest mb-3 px-1 flex items-center gap-1.5"
+          style="color: var(--color-text-muted);"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+          </svg>
+          Other projects
+          <span style="flex:1; height:1px; background:var(--color-text-muted); opacity:0.35; margin-left:4px;"></span>
+          <a href="/projects" class="result-link" style="font-size:0.875rem; font-weight:400; color:var(--color-info); text-transform:uppercase; letter-spacing:0.05em; white-space:nowrap; margin-left:8px;">View all</a>
+        </h2>
+        <ul class="m-0 p-0 list-none flex flex-col gap-0">
+          {otherProjects.map((p) => (
+            <li class="other-proj-card" style="border-bottom: 1px solid var(--color-border); padding: 1.25rem 0;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:0;">
+                <a
+                  href={`/projects/${p.slug}`}
+                  class="result-link text-lg font-medium leading-snug"
+                  style="color: var(--color-info);"
+                >
+                  {p.title}
+                </a>
+              </div>
+              <div class="flex flex-wrap gap-1.5 mt-1.5 mb-2">
+                {p.tags.map((tag) => (
+                  <span
+                    class="text-sm px-2 py-0.5 rounded-full"
+                    style="background: var(--color-accent-tint); color: var(--color-accent-light);"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <p class="text-base m-0 leading-relaxed" style="color: var(--color-text-secondary);">
+                {p.description}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .other-proj-cta {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .other-proj-card:hover .other-proj-cta {
+    opacity: 1;
+  }
+</style>

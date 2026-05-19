@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BackBar from '../../components/BackBar.astro';
+import { projects } from '../../data/projects';
+
+const siteUrl = 'https://mikcowans.com';
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home',     item: `${siteUrl}` },
+    { '@type': 'ListItem', position: 2, name: 'Projects', item: `${siteUrl}/projects` },
+  ],
+};
+
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  '@id': `${siteUrl}/projects/#list`,
+  name: 'SEO Projects by Mik Cowans',
+  description: 'Selected SEO strategy projects covering market research, keyword research, content strategy, and organic growth across global brands.',
+  numberOfItems: projects.length,
+  itemListElement: projects.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: p.title,
+    url: `${siteUrl}/projects/${p.slug}`,
+    description: p.preview,
+  })),
+};
+---
+
+<BaseLayout
+  title="SEO Strategy Projects — Mik Cowans"
+  description="Selected SEO projects by Mik Cowans — organic growth, migrations, content strategy, and technical SEO work across B2B SaaS, eCommerce, and media."
+  schema={[breadcrumb, itemList]}
+>
+  <div style="max-width: 840px; margin: 0 auto; padding: 0 1.25rem;">
+    <BackBar />
+    <main id="main-content" class="pb-16 pt-4">
+      <h1 class="text-4xl font-semibold m-0 mb-6" style="color: var(--color-text-primary); line-height: 1.15;">
+        Projects
+      </h1>
+
+      <div class="mb-10 flex flex-col gap-3" style="color: var(--color-text-secondary);">
+        <p class="text-base leading-relaxed m-0">These are some of the projects I can show that I've enjoyed most.</p>
+        <p class="text-base leading-relaxed m-0">Most SEO work lives in spreadsheets. Rows, pivot tables, dashboards few people open twice. The answers are in there, but answers on their own don't move anything. Someone still has to be convinced, briefed, sold on the idea.</p>
+        <p class="text-base leading-relaxed m-0">So the part of the job I actually like is the translation. Taking a billion rows of search data and turning it into something a marketing director understands on a Sunday evening, and a developer can act on by Monday. A clear narrative, with the numbers in the right places.</p>
+        <p class="text-base leading-relaxed m-0">We might get paid for the analysis. But we act on the story.</p>
+      </div>
+
+      <h2 class="text-sm font-semibold uppercase tracking-widest mb-5 px-1 flex items-center gap-1.5" style="color: var(--color-text-muted);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+        </svg>
+        Selected work
+        <span style="flex:1; height:1px; background:var(--color-text-muted); opacity:0.35; margin-left:4px;"></span>
+      </h2>
+
+      <ul class="m-0 p-0 list-none flex flex-col gap-8">
+        {projects.map((project) => (
+          <li class="proj-card" style="border-bottom: 1px solid var(--color-border); padding-bottom: 1.5rem; display:flex; gap:12px; align-items:flex-start;">
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                <a
+                  href={`/projects/${project.slug}`}
+                  class="result-link text-lg font-medium"
+                  style="color: var(--color-info);"
+                >
+                  {project.title}
+                </a>
+              </div>
+              <div class="flex flex-wrap gap-1.5 mt-1.5 mb-2">
+                {project.tags.map((tag) => (
+                  <span class="text-sm px-2 py-0.5 rounded-full"
+                    style="background: var(--color-accent-tint); color: var(--color-accent-light);">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <p class="text-base m-0 leading-relaxed" style="color: var(--color-text-secondary);">
+                {project.description}
+              </p>
+            </div>
+            <div class="proj-thumb" style="flex-shrink:0; width:92px; height:92px; border-radius:8px; overflow:hidden; background:var(--color-bg-elevated); border:1px solid var(--color-border); display:flex; align-items:center; justify-content:center; padding:6px;">
+              {project.image
+                ? <img src={project.image} alt={`${project.title} — project thumbnail`} width="92" height="92" style="width:100%; height:100%; object-fit:contain; display:block; border-radius:3px;" />
+                : <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-text-muted);" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+                    </svg>
+                  </div>
+              }
+            </div>
+          </li>
+        ))}
+      </ul>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+.proj-thumb {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .proj-card:hover .proj-thumb {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent), 0 4px 24px color-mix(in srgb, var(--color-accent) 20%, transparent);
+  }
+</style>

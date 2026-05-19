@@ -1,0 +1,158 @@
+---
+interface Props {
+  src: string;
+  title?: string;
+}
+const { src, title = 'Document' } = Astro.props;
+---
+
+<div class="pdf-viewer" data-src={src} aria-label={title}>
+  <canvas class="pdf-canvas"></canvas>
+  <div class="pdf-loading" aria-live="polite">Loading document…</div>
+  <div class="pdf-controls" aria-label="PDF navigation">
+    <button class="pdf-btn pdf-prev" aria-label="Previous page" disabled>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      Prev
+    </button>
+    <span class="pdf-page-info">— / —</span>
+    <button class="pdf-btn pdf-next" aria-label="Next page" disabled>
+      Next
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <button class="pdf-btn pdf-expand" aria-label="View fullscreen">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      Expand
+    </button>
+  </div>
+</div>
+
+<script>
+  import * as pdfjsLib from 'pdfjs-dist';
+  import pdfjsWorker from 'pdfjs-dist/build/pdf.worker?url';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
+  document.querySelectorAll<HTMLElement>('.pdf-viewer').forEach((viewer) => {
+    const src = viewer.dataset.src;
+    if (!src) return;
+
+    const canvas   = viewer.querySelector<HTMLCanvasElement>('.pdf-canvas')!;
+    const loading  = viewer.querySelector<HTMLElement>('.pdf-loading')!;
+    const pageInfo = viewer.querySelector<HTMLElement>('.pdf-page-info')!;
+    const prevBtn  = viewer.querySelector<HTMLButtonElement>('.pdf-prev')!;
+    const nextBtn  = viewer.querySelector<HTMLButtonElement>('.pdf-next')!;
+
+    let pdfDoc: Awaited<ReturnType<typeof pdfjsLib.getDocument>>['promise'] | null = null;
+    let currentPage = 1;
+    let rendering = false;
+
+    pdfjsLib.getDocument(src).promise.then((pdf) => {
+      pdfDoc = pdf as any;
+      loading.style.display = 'none';
+      renderPage(1);
+    }).catch(() => {
+      loading.textContent = 'Could not load document.';
+    });
+
+    function renderPage(num: number) {
+      if (rendering || !pdfDoc) return;
+      rendering = true;
+
+      (pdfDoc as any).getPage(num).then((page: any) => {
+        const containerWidth = viewer.clientWidth || 800;
+        const baseViewport   = page.getViewport({ scale: 1 });
+        const scale          = containerWidth / baseViewport.width;
+        const dpr            = window.devicePixelRatio || 1;
+        const viewport       = page.getViewport({ scale: scale * dpr });
+
+        canvas.width  = viewport.width;
+        canvas.height = viewport.height;
+        canvas.style.width  = '100%';
+        canvas.style.height = 'auto';
+
+        page.render({ canvasContext: canvas.getContext('2d')!, viewport }).promise.then(() => {
+          currentPage = num;
+          pageInfo.textContent = `${num} / ${(pdfDoc as any).numPages}`;
+          prevBtn.disabled = num <= 1;
+          nextBtn.disabled = num >= (pdfDoc as any).numPages;
+        }).catch(() => {}).finally(() => {
+          rendering = false;
+        });
+      });
+    }
+
+    const expandBtn = viewer.querySelector<HTMLButtonElement>('.pdf-expand')!;
+
+    prevBtn.addEventListener('click', () => { if (currentPage > 1) renderPage(currentPage - 1); });
+    nextBtn.addEventListener('click', () => { if (pdfDoc && currentPage < (pdfDoc as any).numPages) renderPage(currentPage + 1); });
+    expandBtn.addEventListener('click', () => { if (src) window.open(src, '_blank'); });
+  });
+</script>
+
+<style>
+  .pdf-viewer {
+    position: relative;
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .pdf-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .pdf-loading {
+    padding: 48px;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .pdf-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-surface);
+  }
+
+  .pdf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .pdf-btn:hover:not(:disabled) {
+    background: var(--color-accent-tint);
+    color: var(--color-accent-light);
+    border-color: var(--color-accent);
+  }
+
+  .pdf-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .pdf-page-info {
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    min-width: 50px;
+    text-align: center;
+    font-family: var(--font-mono);
+  }
+</style>

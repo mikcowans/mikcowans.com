@@ -1,0 +1,62 @@
+---
+// Simplified header for non-home pages — back navigation, no animation
+---
+
+<header class="w-full pb-4 flex flex-col" style="padding-top: 100px;" role="banner">
+  <div
+    class="search-bar-wrap w-full flex items-center px-8 py-3"
+    style="
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+    "
+  >
+    <a href="/" class="back-unit" aria-label="Back to home">
+      <svg
+        width="24" height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        class="back-icon"
+      >
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      <span class="back-label">Back to home</span>
+    </a>
+  </div>
+</header>
+
+<style>
+  .back-unit {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-unit:hover {
+    color: var(--color-text-primary);
+  }
+
+  .back-unit:hover .back-icon {
+    transform: translateX(-3px);
+  }
+
+  .back-icon {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .back-label {
+    font-size: 1.5rem;  /* text-2xl */
+    line-height: 2rem;  /* Tailwind text-2xl default */
+    font-weight: 400;
+    padding: 4px 0;     /* matches SearchBar h1 py-1 */
+  }
+</style>

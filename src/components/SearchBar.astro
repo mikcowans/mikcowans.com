@@ -1,0 +1,83 @@
+---
+interface Props {
+  currentPath?: string;
+  intro?: boolean;
+}
+const { currentPath = '/', intro = false } = Astro.props;
+
+const searchIcon = 'M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z';
+---
+
+<header class:list={["w-full pb-4 flex flex-col", { "search-intro": intro }]} style="padding-top: 100px;" role="banner">
+  <!-- Search bar wrapper -->
+  <div
+    class="search-bar-wrap w-full flex items-center gap-3 px-8 py-3 relative"
+    style="
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+    "
+    role="search"
+    aria-label="Search site content"
+  >
+    <!-- Search icon (left) -->
+    <svg
+      width="24" height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      style="color: var(--color-text-muted); flex-shrink: 0;"
+    >
+      <path d={searchIcon} />
+    </svg>
+
+    <!-- H1: the "query" — text lives in DOM for SEO, CSS types it in -->
+    <h1
+      class="typing-text flex-1 text-2xl m-0 py-1"
+      style="color: var(--color-text-primary); font-weight: 400;"
+      aria-label="Mik Cowans, SEO consultant & strategist"
+    >
+      <strong style="font-weight: 700;">Mik Cowans</strong>, SEO consultant &amp; strategist
+    </h1>
+
+    <!-- Live search input (hidden until user focuses — the "wow" interaction) -->
+    <input
+      id="live-search"
+      type="search"
+      placeholder="Search any projects or data"
+      autocomplete="off"
+      aria-label="Filter page content"
+      class="absolute inset-0 opacity-0 focus:opacity-100 w-full h-full px-12 rounded-[var(--radius-pill)] bg-transparent focus:outline-none transition-opacity duration-200"
+      style="
+        background: var(--color-bg-surface);
+        color: var(--color-text-primary);
+        border-radius: var(--radius-pill);
+        font-family: var(--font-sans);
+        font-size: 1.5rem;
+      "
+    />
+
+  </div>
+
+  <!-- Spacing preserved below search bar -->
+  <div class="mt-6"></div>
+</header>
+
+<script>
+  function restartTyping() {
+    const el = document.querySelector('.typing-text') as HTMLElement | null;
+    if (!el) return;
+    el.style.animation = 'none';
+    void el.offsetHeight; // force reflow before re-applying
+    el.style.animation = '';
+  }
+
+  restartTyping();
+
+  // Re-run on bfcache restore (back/forward navigation)
+  window.addEventListener('pageshow', (e) => { if (e.persisted) restartTyping(); });
+</script>

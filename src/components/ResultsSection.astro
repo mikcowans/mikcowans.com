@@ -1,0 +1,255 @@
+---
+import type { Project } from '../data/projects';
+import type { Role }    from '../data/roles';
+
+interface Props {
+  projects: Project[];
+  roles: Role[];
+}
+
+const { projects, roles } = Astro.props;
+---
+
+<section
+  class="w-full mt-8"
+  aria-label="Projects and roles"
+>
+
+  <!-- ── PROJECTS ── -->
+  <div class="mb-8 section-reveal" style="animation-delay: 1.6s">
+    <h2
+      class="text-sm font-semibold uppercase tracking-widest mb-4 px-1 flex items-center gap-1.5"
+      style="color: var(--color-text-muted);"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+      </svg>
+      <a href="/projects" style="color:inherit; text-decoration:none;" onmouseover="this.style.color='var(--color-text-primary)'" onmouseout="this.style.color='inherit'">Projects</a>
+      <span style="flex:1; height:1px; background:var(--color-text-muted); opacity:0.35; margin-left:4px;"></span>
+      <a href="/projects" style="color:inherit; text-decoration:none; font-weight:400; margin-left:4px;" onmouseover="this.style.color='var(--color-text-primary)'" onmouseout="this.style.color='inherit'">View all</a>
+    </h2>
+
+    <ul class="m-0 p-0 list-none flex flex-col gap-5">
+      {projects.map((project, i) => (
+        <li
+          class={`project-item result-item search-result-item stagger-in delay-${i + 3}`}
+          data-searchable={`${project.title} ${project.description} ${project.tags.join(' ')}`}
+          style="border-radius: var(--radius-md); padding: 8px; margin: -8px; transition: background 0.2s ease;"
+        >
+          <!-- Outer flex: content left, full-height image right -->
+          <div style="display:flex; gap:16px; align-items:stretch;">
+
+            <!-- Left: title, tags, description, sub-links -->
+            <div style="flex:1; min-width:0;">
+              <!-- Title row -->
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                <a
+                  href={`/projects/${project.slug}`}
+                  class="result-link text-lg font-medium leading-snug"
+                  style="color: var(--color-info);"
+                >
+                  {project.title}
+                </a>
+              </div>
+
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-1.5 mt-1 mb-1.5">
+                {project.tags.map((tag) => (
+                  <span
+                    class="text-sm px-2 py-0.5 rounded-full"
+                    style="background: var(--color-accent-tint); color: var(--color-accent-light);"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <!-- Description -->
+              <p class="text-base m-0 leading-relaxed" style="color: var(--color-text-secondary);">
+                {project.description}
+              </p>
+
+              <!-- Indented sub-links -->
+              {project.subLinks.length > 0 && (
+                <ul class="mt-2 pl-4 m-0 list-none flex flex-col gap-1"
+                  style="border-left: 1px solid var(--color-border);"
+                >
+                  {project.subLinks.map((sub) => (
+                    <li>
+                      <a href={sub.href} class="result-link text-sm" style="color: var(--color-info);">
+                        {sub.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <!-- Right: full-height thumbnail -->
+            <div class="project-thumb" style="flex-shrink:0; width:140px; border-radius:8px; overflow:hidden; background:var(--color-bg-elevated); border:1px solid var(--color-border); align-self:stretch; display:flex; align-items:center; justify-content:center; padding:8px;">
+              {project.image
+                ? <img src={project.image} alt={`${project.title} — project thumbnail`} style="width:100%; height:100%; object-fit:contain; display:block; border-radius:4px;" />
+                : <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-text-muted);" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+                    </svg>
+                  </div>
+              }
+            </div>
+
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- ── ROLES ── -->
+  <div class="section-reveal" style="margin-top: 72px; animation-delay: 2.1s">
+    <h2
+      class="text-sm font-semibold uppercase tracking-widest mb-4 px-1 flex items-center gap-1.5"
+      style="color: var(--color-text-muted);"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>
+      </svg>
+      Roles
+      <span style="flex:1; height:1px; background:var(--color-text-muted); opacity:0.35; margin-left:4px;"></span>
+    </h2>
+
+    <!-- Timeline wrapper: the vertical line runs through the left gutter -->
+    <ul class="m-0 p-0 list-none" style="position: relative;">
+
+      <!-- Continuous vertical line behind all dots -->
+      <li aria-hidden="true" style="
+        position: absolute;
+        left: 13.5px;
+        top: 8px;
+        bottom: 8px;
+        width: 1px;
+        background: var(--color-border);
+        pointer-events: none;
+      "></li>
+
+      {roles.map((role, i) => (
+        <li
+          class={`search-result-item stagger-in delay-${i + 8}`}
+          data-searchable={`${role.title} ${role.company} ${role.description}`}
+          style="display: flex; gap: 18px; padding-bottom: 32px; position: relative;"
+        >
+          <!-- Logo / dot -->
+          {role.logos ? (
+            <!-- Overlapping stack for multi-logo roles -->
+            <div style="flex-shrink:0; display:flex; margin-top:1px; position:relative; z-index:1;" aria-hidden="true">
+              {role.logos.map((logo, i) => (
+                <div style={`width:28px; height:28px; border-radius:50%; overflow:hidden; background:#f0e8d8; border:2px solid var(--color-bg-base); display:flex; align-items:center; justify-content:center; ${i > 0 ? 'margin-left:-8px;' : ''}`}>
+                  <img src={logo.src} alt={logo.alt} width="16" height="16" style="display:block;" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style="
+              flex-shrink: 0;
+              width: 28px;
+              height: 28px;
+              border-radius: 50%;
+              overflow: hidden;
+              margin-top: 1px;
+              position: relative;
+              z-index: 1;
+              background: #f0e8d8;
+              border: 1px solid var(--color-border);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            " aria-hidden="true">
+              {role.domain ? (
+                <img
+                  src={`/favicons/${role.domain}.png`}
+                  alt=""
+                  width="16"
+                  height="16"
+                  style="display:block;"
+                />
+              ) : (
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="color: var(--color-text-muted);" aria-hidden="true">
+                  <path d="M20 7h-4V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zm-10-2h4v2h-4V5z"/>
+                </svg>
+              )}
+            </div>
+          )}
+
+          <!-- Content -->
+          <div class="result-item" style="flex: 1; min-width: 0; border-radius: var(--radius-md);">
+
+            <!-- Period pill -->
+            <p class="text-sm m-0 mb-1" style="color: var(--color-text-muted); font-family: var(--font-mono);">
+              {role.period}
+            </p>
+
+            <!-- Company + title -->
+            <div class="flex items-baseline gap-2 flex-wrap">
+              <span class="text-lg font-medium leading-snug" style="color: var(--color-text-primary);">
+                {role.company}
+              </span>
+              <span class="text-sm" style="color: var(--color-text-muted);">
+                {role.title}
+              </span>
+            </div>
+
+            <!-- Snippet -->
+            <p class="text-base mt-1 m-0 leading-relaxed" style="color: var(--color-text-secondary);">
+              {role.description}
+            </p>
+
+
+            <!-- Preview card -->
+            <div
+              class="preview-card"
+              style="
+                background: var(--color-bg-elevated);
+                border: 1px solid var(--color-border);
+                border-radius: var(--radius-lg);
+                padding: 14px 16px;
+              "
+              aria-hidden="true"
+            >
+              <p class="text-sm font-semibold m-0 mb-1" style="color: var(--color-text-primary);">
+                {role.title}
+              </p>
+              <p class="text-sm m-0 mb-2" style="color: var(--color-accent); display:flex; align-items:center; gap:5px;">
+                {role.domain && (
+                  <img
+                    src={`/favicons/${role.domain}.png`}
+                    alt=""
+                    width="12"
+                    height="12"
+                    style="border-radius:2px; flex-shrink:0;"
+                  />
+                )}
+                {role.company} · {role.period}
+              </p>
+              <p class="text-sm leading-relaxed m-0" style="color: var(--color-text-secondary);">
+                {role.preview}
+              </p>
+            </div>
+
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+</section>
+
+<style>
+  .project-item:hover {
+    background: var(--color-bg-surface);
+  }
+  .project-thumb {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .project-item:hover .project-thumb {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent), 0 4px 24px color-mix(in srgb, var(--color-accent) 20%, transparent);
+  }
+</style>

@@ -1,0 +1,13 @@
+{
+  "name": "Mik Cowans — SEO Consultant & Strategist",
+  "short_name": "Mik Cowans",
+  "description": "Portfolio of Mik Cowans — independent SEO consultant helping brands grow organic visibility.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#181613",
+  "theme_color": "#181613",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "48x48", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
