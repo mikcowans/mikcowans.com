@@ -144,9 +144,7 @@ const projectTiles = [
       </a>
 
       <!-- CV download tile -->
-      <a
-        href="/cv.pdf"
-        download
+      <div
         style="
           width: 165px;
           height: 165px;
@@ -159,19 +157,19 @@ const projectTiles = [
           gap: 10px;
           background: var(--color-bg-surface);
           border: 1px solid var(--color-border);
-          text-decoration: none;
+          position: relative;
         "
-        class="cta-tile"
-        aria-label="Download CV"
+        aria-label="CV coming soon"
       >
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(232, 150, 58, 0.5));" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
           <polyline points="14 2 14 8 20 8"/>
           <line x1="12" y1="12" x2="12" y2="18"/>
           <polyline points="9 15 12 18 15 15"/>
         </svg>
-        <p style="margin:0; font-size:0.875rem; font-weight:500; color:#fff; letter-spacing:0.02em;">Download CV</p>
-      </a>
+        <p style="margin:0; font-size:0.875rem; font-weight:500; color:var(--color-text-muted); letter-spacing:0.02em;">Download CV</p>
+        <span style="font-size:0.7rem; color:var(--color-accent); letter-spacing:0.05em; text-transform:uppercase;">Coming soon</span>
+      </div>
 
     </div>
 
