@@ -75,7 +75,7 @@ body {
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
   min-height: 100dvh;
   overflow-y: scroll;
@@ -171,6 +171,15 @@ a {
 }
 
 /* =============================================================
+   Search bar vertical position
+   ============================================================= */
+@media (max-width: 768px) {
+  .search-header {
+    padding-top: 50px !important;
+  }
+}
+
+/* =============================================================
    Search bar glow on focus
    ============================================================= */
 .search-bar-wrap {
@@ -181,6 +190,24 @@ a {
   box-shadow:
     0 0 0 1px var(--color-accent),
     0 4px 32px color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+/* =============================================================
+   Stretched link — makes entire card clickable via title anchor
+   ============================================================= */
+.result-link.stretched-link {
+  position: static;
+}
+.result-link.stretched-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+/* Sub-links inside stretched cards must sit above the overlay */
+.stretched-card .sub-link {
+  position: relative;
+  z-index: 2;
 }
 
 /* =============================================================

@@ -53,7 +53,7 @@ const projectTiles = [
   style="margin-bottom: 24px;"
 >
 
-  <div style="
+  <div class="hero-scroll" style="
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -95,7 +95,7 @@ const projectTiles = [
     <!-- ── Card 2: About Mik (full height) ─────────────────── -->
     <article style={`${cardBase} flex-shrink:0; width:310px; height:100%; scroll-snap-align:start;`}>
       <div style={headerStyle}>About Mik</div>
-      <div style="flex:1; padding:22px 18px; display:flex; align-items:center;">
+      <div style="flex:1; padding:14px 18px; display:flex; flex-direction:column; justify-content:center;">
         <p style="font-size:1.075rem; line-height:1.65; margin:0; color:#fff; font-weight:400;">
           SEO specialist who's spent almost 20 years scaling organic search for global B2C and B2B brands. I treat websites as products: structured experimentation, technical depth, and AI tooling that ships. Based in Scotland, working globally.
         </p>
@@ -145,6 +145,7 @@ const projectTiles = [
 
       <!-- CV download tile -->
       <div
+        class="cv-tile"
         style="
           width: 165px;
           height: 165px;
@@ -237,6 +238,11 @@ const projectTiles = [
     .hero-photo:hover { filter: sepia(0%) !important; }
     .cta-tile { transition: border-color 0.2s ease, background 0.2s ease; }
     .cta-tile:hover { border-color: var(--color-accent) !important; background: var(--color-accent-tint) !important; }
+
+    @media (max-width: 768px) {
+      .hero-scroll { height: 300px !important; }
+      .cta-tile, .cv-tile { width: 145px !important; height: 145px !important; }
+    }
 
     .corgi-peek {
       position: absolute;

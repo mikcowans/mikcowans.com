@@ -8,7 +8,7 @@ const { currentPath = '/', intro = false } = Astro.props;
 const searchIcon = 'M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z';
 ---
 
-<header class:list={["w-full pb-4 flex flex-col", { "search-intro": intro }]} style="padding-top: 100px;" role="banner">
+<header class:list={["w-full pb-4 flex flex-col search-header", { "search-intro": intro }]} style="padding-top: 100px;" role="banner">
   <!-- Search bar wrapper -->
   <div
     class="search-bar-wrap w-full flex items-center gap-3 px-8 py-3 relative"

@@ -60,12 +60,12 @@ const itemList = {
 
       <ul class="m-0 p-0 list-none flex flex-col gap-8">
         {projects.map((project) => (
-          <li class="proj-card" style="border-bottom: 1px solid var(--color-border); padding-bottom: 1.5rem; display:flex; gap:12px; align-items:flex-start;">
+          <li class="proj-card stretched-card" style="border-bottom: 1px solid var(--color-border); padding-bottom: 1.5rem; display:flex; gap:12px; align-items:flex-start; position: relative;">
             <div style="flex:1; min-width:0;">
               <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
                 <a
                   href={`/projects/${project.slug}`}
-                  class="result-link text-lg font-medium"
+                  class="result-link stretched-link text-lg font-medium"
                   style="color: var(--color-info);"
                 >
                   {project.title}

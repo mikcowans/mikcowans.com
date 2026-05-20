@@ -7,7 +7,7 @@ const brands = [
   { name: 'Aberdeen',       logo: '/logos/Aberdeen_Investments_svg.svg', maxHeight: '160px' },
   { name: 'Standard Life',  logo: '/logos/Standard_Life.svg' },
   { name: 'Marriott',       logo: '/logos/Marriott_International.svg' },
-  { name: 'Wood Mackenzie', logo: '/logos/woodmac-logo.svg' },
+  { name: 'WoodMac', logo: '/logos/woodmac-logo.svg' },
   { name: 'HPE',            logo: '/logos/Hewlett_Packard_Enterprise.svg' },
   { name: 'Bulk',           logo: '/logos/Bulk.svg' },
   { name: 'Nord Anglia',    logo: '/logos/Nord_Anglia.svg' },
@@ -83,7 +83,17 @@ const initials = (name: string) =>
     max-height: 152px;
     transition: max-height 0.4s ease;
   }
-  .brands-wrap.expanded { max-height: 800px; }
+  .brands-wrap.expanded { max-height: 1200px; }
+
+  @media (max-width: 768px) {
+    .brands-wrap {
+      grid-template-columns: repeat(3, 1fr);
+      max-height: 320px;
+    }
+    .brand-box {
+      height: 80px;
+    }
+  }
 
   .brand-tile {
     display: flex;

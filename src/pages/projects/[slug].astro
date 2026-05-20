@@ -149,11 +149,11 @@ const creativeWork = {
         </h2>
         <ul class="m-0 p-0 list-none flex flex-col gap-0">
           {otherProjects.map((p) => (
-            <li class="other-proj-card" style="border-bottom: 1px solid var(--color-border); padding: 1.25rem 0;">
+            <li class="other-proj-card stretched-card" style="border-bottom: 1px solid var(--color-border); padding: 1.25rem 0; position: relative;">
               <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:0;">
                 <a
                   href={`/projects/${p.slug}`}
-                  class="result-link text-lg font-medium leading-snug"
+                  class="result-link stretched-link text-lg font-medium leading-snug"
                   style="color: var(--color-info);"
                 >
                   {p.title}
