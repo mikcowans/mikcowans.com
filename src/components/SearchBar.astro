@@ -51,7 +51,7 @@ const searchIcon = 'M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z';
       placeholder="Search any projects or data"
       autocomplete="off"
       aria-label="Filter page content"
-      class="absolute inset-0 opacity-0 focus:opacity-100 w-full h-full px-12 rounded-[var(--radius-pill)] bg-transparent focus:outline-none transition-opacity duration-200"
+      class="live-search-input absolute inset-0 opacity-0 focus:opacity-100 w-full h-full px-12 rounded-[var(--radius-pill)] bg-transparent focus:outline-none transition-opacity duration-200"
       style="
         background: var(--color-bg-surface);
         color: var(--color-text-primary);
@@ -67,17 +67,29 @@ const searchIcon = 'M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z';
   <div class="mt-6"></div>
 </header>
 
+<style>
+  .live-search-input.has-value {
+    opacity: 1 !important;
+  }
+</style>
+
 <script>
   function restartTyping() {
     const el = document.querySelector('.typing-text') as HTMLElement | null;
     if (!el) return;
     el.style.animation = 'none';
-    void el.offsetHeight; // force reflow before re-applying
+    void el.offsetHeight;
     el.style.animation = '';
   }
 
   restartTyping();
-
-  // Re-run on bfcache restore (back/forward navigation)
   window.addEventListener('pageshow', (e) => { if (e.persisted) restartTyping(); });
+
+  // Keep input visible while it has a value
+  const input = document.getElementById('live-search') as HTMLInputElement | null;
+  if (input) {
+    input.addEventListener('input', () => {
+      input.classList.toggle('has-value', input.value.length > 0);
+    });
+  }
 </script>

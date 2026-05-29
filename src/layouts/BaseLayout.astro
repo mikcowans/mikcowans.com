@@ -113,24 +113,32 @@ const schemaArray = schema
     </script>
 
     <!-- Live search filter -->
-    <script>
-      const searchInput = document.getElementById('live-search') as HTMLInputElement | null;
-      if (searchInput) {
-        searchInput.addEventListener('input', () => {
-          const q = searchInput.value.toLowerCase().trim();
-          document.querySelectorAll('[data-searchable]').forEach((el) => {
-            const text = (el as HTMLElement).dataset.searchable ?? '';
-            const parent = el.closest('.search-result-item') as HTMLElement | null;
-            if (!parent) return;
-            if (!q || text.toLowerCase().includes(q)) {
-              parent.style.display = '';
-              parent.style.opacity = '1';
-            } else {
-              parent.style.opacity = '0.25';
-            }
+    <style is:global>
+      .search-hidden { display: none !important; }
+    </style>
+    <script is:inline>
+      (function () {
+        function attachSearch() {
+          var input = document.getElementById('live-search');
+          if (!input) return;
+          input.addEventListener('input', function () {
+            var q = input.value.toLowerCase().trim();
+            document.querySelectorAll('[data-searchable]').forEach(function (el) {
+              var text = el.dataset.searchable || '';
+              var parent = el.closest('.search-result-item');
+              if (!parent) return;
+              var matches = !q || text.toLowerCase().includes(q);
+              parent.classList.toggle('search-hidden', !matches);
+            });
           });
-        });
-      }
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', attachSearch);
+        } else {
+          attachSearch();
+        }
+      })();
     </script>
   </body>
 </html>
