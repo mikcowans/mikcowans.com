@@ -21,7 +21,7 @@ export const projects: Project[] = [
     image: '/project-hotel-booking.webp',
     pdfEmbed: '/pdfs/european-hotel-booking-analysis.pdf',
     title: 'European Hotel Booking Analysis',
-    displayUrl: 'mikcowans.com › projects › european-hotel-booking-analysis',
+    displayUrl: 'mikcowans.co.uk › projects › european-hotel-booking-analysis',
     description:
       'A global hotel chain wanted to understand how people actually book rooms. The trends, the habits, the moments where the decision gets made. They needed digital adoption and travel habit insights to shape their room booking strategy.',
     preview:
@@ -49,7 +49,7 @@ export const projects: Project[] = [
     image: '/project-pension-isa.webp',
     pdfEmbed: '/pdfs/pension-isa-search-analysis.pdf',
     title: 'Pension & ISA Search Analysis',
-    displayUrl: 'mikcowans.com › projects › pension-isa-search-analysis',
+    displayUrl: 'mikcowans.co.uk › projects › pension-isa-search-analysis',
     description:
       'A large keyword research and insight project across the UK pension and ISA markets. I categorised every query by product, theme and funnel stage, then mapped the customer journey end to end.',
     preview:
@@ -78,7 +78,7 @@ export const projects: Project[] = [
     image: '/project-halloween-costume-market-analysis.webp',
     pdfEmbed: '/pdfs/halloween-costume-market-analysis.pdf',
     title: 'Halloween Costume Market Analysis',
-    displayUrl: 'mikcowans.com › projects › halloween-costume-market-analysis',
+    displayUrl: 'mikcowans.co.uk › projects › halloween-costume-market-analysis',
     description:
       'A global fashion ecommerce retailer wanted to know where to invest its SEO effort across European markets, and how to win Halloween, their biggest sales window of the year.',
     preview:
@@ -108,7 +108,7 @@ export const projects: Project[] = [
     image: '/project-finance-product-search-analysis.webp',
     pdfEmbed: '/pdfs/finance-product-search-analysis.pdf',
     title: 'Finance Product Search Analysis',
-    displayUrl: 'mikcowans.com › projects › finance-product-search-analysis',
+    displayUrl: 'mikcowans.co.uk › projects › finance-product-search-analysis',
     description:
       'A major financial services brand wanted to understand the search behaviour around four of its core product lines: ISAs, pensions, investments and equity release.',
     preview:
@@ -138,7 +138,7 @@ export const projects: Project[] = [
     image: '/project-private-school-global-search-analysis.webp',
     pdfEmbed: '/pdfs/private-school-global-search-analysis.pdf',
     title: 'Private School Global Search Analysis',
-    displayUrl: 'mikcowans.com › projects › private-school-global-search-analysis',
+    displayUrl: 'mikcowans.co.uk › projects › private-school-global-search-analysis',
     description:
       'A global network of private schools wanted to know where to focus its digital investment across 17 markets — complicated by the fact that parents don\'t search domestically.',
     preview:

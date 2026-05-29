@@ -21,7 +21,7 @@ const {
   noindex = false,
 } = Astro.props;
 
-const siteUrl      = 'https://mikcowans.com';
+const siteUrl      = 'https://mikcowans.co.uk';
 const canonicalUrl = canonical ?? Astro.url.pathname;
 const fullCanonical = `${siteUrl}${canonicalUrl}`;
 const fullOg       = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
